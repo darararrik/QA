@@ -1,10 +1,17 @@
 ﻿using lab2;
-
-internal class Program
+class Program
 {
-    private static void Main(string[] args)
+    static void Main(string[] args)
     {
-        Sequence_of_numbers number = new Sequence_of_numbers();
+      
+        Console.WriteLine("Введите строку:");
+        string input = Console.ReadLine().ToUpper();
 
+        // Сдвигаем строку
+        string shiftedString = KeyboardShift.ShiftString(input);
+
+        Console.WriteLine($"Сдвинутая строка: {shiftedString}");
     }
+
+    
 }
