@@ -27,17 +27,17 @@ namespace lab1
                 string row = Console.ReadLine();
  
                 for (int j = 0; j < m; j++)
-                    if (row[i] == '*' || row[i] == '.')
+                {
+                    if (row[j] == '*' || row[j] == '.')
                         field[i, j] = row[j];
                     else
-                        Console.WriteLine("Нужно вводить . или *\nВ строке в которой был введен не верный символ, вся строка была заменена на ."); break;
-
-
-
-
-
-
-
+                    {
+                        Console.WriteLine("Нужно вводить . или *\nВ строке в которой был введен не верный символ, символ был заменен на .");
+                        field[i, j] = '.';
+                    }
+                }    
+                      
+                        
 
             }
         }
