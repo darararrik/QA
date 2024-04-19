@@ -9,9 +9,9 @@ namespace lab2
         public Sequence_of_numbers()
         {
             Console.WriteLine("Введите последовательность чисел через пробел:");
-            string input = Console.ReadLine();
-            string[] sizes = input.Split(' ');
-            numbers = Array.ConvertAll(sizes, int.Parse);
+            string[] input = Console.ReadLine().Split(' ');
+
+            numbers = Array.ConvertAll(input, int.TryParse);
             Console.WriteLine(JollyJumpersCheck());
         }
 
