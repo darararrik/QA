@@ -1,76 +1,91 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 class Program
 {
-    static void Main(string[] args)
+    static int FindPos(List<int> seqNum, int num)
     {
-        // Считываем количество тестов
-        int tests = int.Parse(Console.ReadLine());
-
-        // Цикл по каждому тесту
-        for (int t = 0; t < tests; t++)
+        for (int i = 0; i < seqNum.Count; i++)
         {
-            Console.WriteLine($"Тест {t + 1}:");
-            Console.WriteLine("Введите количество черепах в груде:");
-            // Считываем количество черепах в груде для текущего теста
-            int turtlesCount = int.Parse(Console.ReadLine());
-
-            List<string> initialOrder = new List<string>();
-            Console.WriteLine("Введите начальный порядок черепах:");
-            // Считываем имена черепах в начальном порядке
-            for (int i = 0; i < turtlesCount; i++)
-            {
-                initialOrder.Add(Console.ReadLine());
-            }
-
-            List<string> desiredOrder = new List<string>();
-            Console.WriteLine("Введите желаемый порядок черепах:");
-            // Считываем имена черепах в желаемом порядке
-            for (int i = 0; i < turtlesCount; i++)
-            {
-                desiredOrder.Add(Console.ReadLine());
-            }
-
-            // Находим и выводим последовательность операций для текущего теста
-            List<string> operations = FindOperations(initialOrder, desiredOrder);
-            Console.WriteLine("Последовательность операций для преобразования:");
-            foreach (var op in operations)
-            {
-                Console.WriteLine(op);
-            }
-            Console.WriteLine();
+            if (seqNum[i] == num)
+                return i;
         }
+        return -1;
     }
 
-    // Функция для нахождения последовательности операций
-    static List<string> FindOperations(List<string> initialOrder, List<string> desiredOrder)
+    static void MoveTop(List<int> array, int j)
     {
-        List<string> operations = new List<string>();
-
-        // Словарь для хранения позиций черепах в желаемом порядке
-        Dictionary<string, int> desiredPositions = new Dictionary<string, int>();
-        for (int i = 0; i < desiredOrder.Count; i++)
+        int temp = array[j];
+        for (int i = j; i > 0; i--)
         {
-            desiredPositions[desiredOrder[i]] = i;
+            array[i] = array[i - 1];
+        }
+        array[0] = temp;
+    }
+
+    static void SortSequence(List<string> startOrder, List<string> endOrder, List<string> result)
+    {
+        int n = startOrder.Count;
+        Dictionary<string, int> endDict = new Dictionary<string, int>();
+        for (int i = 0; i < endOrder.Count; i++)
+        {
+            endDict[endOrder[i]] = i;
         }
 
-        // Проходимся по начальному порядку
-        for (int i = 0; i < initialOrder.Count; i++)
+        List<int> seqNum = new List<int>();
+        foreach (var s in startOrder)
         {
-            string turtle = initialOrder[i];
-            int desiredIndex = desiredPositions[turtle]; // Находим позицию черепахи в желаемом порядке
-            while (i != desiredIndex)
+            seqNum.Add(endDict[s]);
+        }
+        
+        for (int curr = n - 1; curr > 0; curr--)
+        {//Если индекс текущего числа(curr) меньше чем индекс предыдущего мы перемещаем предыдущее число в начало
+            int posCurr = FindPos(seqNum, curr);
+            int posNext = FindPos(seqNum, curr - 1);
+            if (posCurr < posNext)
             {
-                string movedTurtle = initialOrder[i]; // Получаем черепаху, которую нужно переместить
-                operations.Add(movedTurtle); // Добавляем её в последовательность операций
-                initialOrder.RemoveAt(i); // Удаляем черепаху с текущей позиции
-                initialOrder.Insert(desiredIndex, movedTurtle); // Вставляем её на нужную позицию
-                i = desiredIndex; // Обновляем текущую позицию
-                desiredIndex = desiredPositions[movedTurtle]; // Обновляем желаемую позицию для следующей итерации
+                MoveTop(seqNum, posNext);
+                result.Add(endOrder[curr - 1]);
+      
             }
-        }
 
-        return operations;
+           
+
+        }
+      
+
+
+
+    }
+
+    static void Main(string[] args)
+    {
+        StreamReader reader = new StreamReader("input.txt");
+        int numOfTests = int.Parse(reader.ReadLine());
+
+        for (int t = 0; t < numOfTests; t++)
+        {
+            int lines = int.Parse(reader.ReadLine());
+            List<string> startOrder = new List<string>();
+            for (int i = 0; i < lines; i++)
+            {
+                startOrder.Add(reader.ReadLine().Trim());
+            }
+
+            List<string> endOrder = new List<string>();
+            for (int i = 0; i < lines; i++)
+            {
+                endOrder.Add(reader.ReadLine().Trim());
+            }
+
+            List<string> result = new List<string>();
+
+     
+            SortSequence(startOrder, endOrder, result);
+            Console.WriteLine(string.Join(Environment.NewLine, result));
+            Console.WriteLine();
+        }
+        reader.Close();
     }
 }
