@@ -42,6 +42,8 @@ int H() {
 }
 int Htable[4][4][16];
 int IDA(int dep, int hv, int prestep) {
+    // hv расстояние до решения
+// если равно 0 то нашел решение
     if (hv == 0) {
         solved = dep;
         path[dep] = '\0';
@@ -51,12 +53,15 @@ int IDA(int dep, int hv, int prestep) {
     if (dep + 5 * hv / 3 > mxdep) {
         return dep + 5 * hv / 3;
     }
+    //x y = координаты 0 => tx ty = коорд 0
     int i, tx, ty, x = init.ix, y = init.iy;
     int submxdep = 0xfff, val = 0xfff, shv;
 
     for (i = 0; i < 4; i++) {
+        //??
         if (i + prestep == 3)    continue;
         tx = x + dir[i][0], ty = y + dir[i][1];
+        //??
         if (tx < 0 || ty < 0 || tx > 3 || ty > 3)
             continue;
 
@@ -106,7 +111,7 @@ int main() {
             }
             while (solved == 0)
                 mxdep = IDA(0, initH, -1);
-            //printf("%d\n", solved);
+            printf("%d\n", solved);
         }
         else {
             puts("This puzzle is not solvable.");
