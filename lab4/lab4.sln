@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lab4_1(IDA)", "lab4_1(IDA)\lab4_1(IDA).csproj", "{A36520FD-6361-4675-9288-1D07A44F89FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lab4_2", "lab4_2\lab4_2.csproj", "{74D769B8-8C76-43CE-B351-5FF77DFAD109}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lab4_2", "lab4_2\lab4_2.csproj", "{74D769B8-8C76-43CE-B351-5FF77DFAD109}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
