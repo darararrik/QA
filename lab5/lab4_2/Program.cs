@@ -79,8 +79,8 @@ class FireStationPlacement
                 }
             }
             #region ShowArray
-            Console.WriteLine("    1    2    3    4    5    6");
-            Console.WriteLine("    ---------------------------");
+        Console.WriteLine("    1    2    3    4    5    6    7");
+            Console.WriteLine("    -------------------------------");
             for (int i = 0; i < I; i++)
             {
                 Console.Write($"{i + 1}|");
@@ -114,9 +114,9 @@ class FireStationPlacement
             }
 
             #region ShowArray
-            Console.WriteLine("    1    2    3    4    5    6");
-                Console.WriteLine("    ---------------------------");
-                for (int i = 0; i < I; i++)
+            Console.WriteLine("    1    2    3    4    5    6    7");
+            Console.WriteLine("    -------------------------------");
+            for (int i = 0; i < I; i++)
                 {
                     Console.Write($"{i + 1}|");
 
@@ -202,8 +202,8 @@ class FireStationPlacement
 
             maxValue = 0;
             #region ShowArray
-            Console.WriteLine("    1    2    3    4    5    6");
-            Console.WriteLine("    ---------------------------");
+            Console.WriteLine("    1    2    3    4    5    6    7");
+            Console.WriteLine("    -------------------------------");
             for (int i = 0; i < I; i++)
             {
                 Console.Write($"{i + 1}|");
