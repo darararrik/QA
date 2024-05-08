@@ -256,6 +256,7 @@ namespace lab4_1_IDA_
                 Console.Write(puzzle.step);
 
             }
+            Console.WriteLine();
         }
         #endregion
     }

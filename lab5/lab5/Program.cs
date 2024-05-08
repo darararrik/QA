@@ -1,46 +1,157 @@
-﻿using System;
-using System.Collections.Generic;
-
-class Program
+﻿internal class Program
 {
-    static List<(int, int, int)> FindMinSquares(int N)
+    static int[,] adjancyMatrix;
+    //graphs[0] - Вершины
+    //graphs[1] - Ребра
+    static int[] graphs;
+    static int Tests;
+    static int S, D, T;
+
+    static void Matrix()
     {
-        int[] dp = new int[N + 1];
-        List<(int, int, int)> squares = new List<(int, int, int)>();
-
-        for (int i = 1; i <= N; i++)
+        for (int i = 0; i < graphs[1]; i++) 
         {
-            dp[i] = i * i;
-            for (int j = 1; j < i; j++)
+            for(int j = 0; j < graphs[1]; j++) 
             {
-                if (j * j > i)
-                    break;
-                dp[i] = Math.Min(dp[i], 1 + dp[i - j * j]);
-            }
-        }
-
-        while (N > 0)
-        {
-            int side = (int)Math.Sqrt(dp[N] - 1) + 1;
-            squares.Add((1, 1, side));
-            N -= side * side;
-        }
-
-        return squares;
-    }
-
-    static void Main(string[] args)
-    {
-        int T = int.Parse(Console.ReadLine());
-        for (int t = 0; t < T; t++)
-        {
-            int N = int.Parse(Console.ReadLine());
-            List<(int, int, int)> result = FindMinSquares(N);
-            Console.WriteLine(result.Count);
-            foreach (var square in result)
-            {
-                Console.WriteLine($"{square.Item1} {square.Item2} {square.Item3}");
+                adjancyMatrix[i, j] = -1;
             }
         }
     }
+    static void MatrixFloyd()
+    {
+        for (int k = 0; k < graphs[1]; k++)
+        {
+            for (int i = 0; i < graphs[1]; i++)
+            {
+                for (int j = 0; j < graphs[1]; j++)
+                {
+                    adjancyMatrix[i, j] = Math.Max(adjancyMatrix[i, j], Math.Min(adjancyMatrix[i,k], adjancyMatrix[k,j]));
+                }
+            }
+        }
+
+    }
+    private static void Main()
+    {
+        bool Correct = false;
+        int C1, C2, P;
+        graphs = new int[2];
+
+        Console.WriteLine("Введите количество тестовых блоков.");
+        while (!Correct) 
+        {
+            try
+            {
+                if (!int.TryParse(Console.ReadLine(), out Tests))
+                    throw new FormatException("Неправильный формат ввода. Пожалуйста, введите одно число.");
+                if(Tests == 0 || Tests<0)
+                    throw new FormatException("Введите число >0");
+
+                Correct = true;
+
+            }
+            catch (FormatException e)
+            {
+
+                Console.WriteLine($"Ошибка ввода: {e.Message}");
+            }
+        }
+        while (Tests-->0) 
+        {
+            Console.WriteLine("Введите число городов и число дорожных сегментов через пробел.");
+            string[] input = Console.ReadLine().Split();
+
+            Correct = false;
+
+            while (!Correct)
+            {
+                try
+                {
+                    if (!int.TryParse(input[0], out graphs[0]) || !int.TryParse(input[1], out graphs[1]))
+                        throw new FormatException($"Неправильный формат ввода. Пожалуйста повторите ввод городов и дорог.");
+                    if (graphs[0] == 0 || graphs[0] < 0 || graphs[1] == 0 || graphs[1] < 0)
+                        throw new FormatException("Неправильный формат ввода. Пожалуйста повторите ввод городов и дорог. Числа должны быть больше 0.");
+                    Correct = true;
+                }
+                catch (FormatException e)
+                {
+                    Console.WriteLine($"Ошибка ввода: {e.Message}");
+                    input = Console.ReadLine().Split();
+
+                }
+            }
+            adjancyMatrix = new int[graphs[1], graphs[1]];
+
+            Matrix();
+            Console.WriteLine("Введите номера городов (откуда - куда) и число пассажиров, которые могут перевозиться между двумя городами.\nЧерез пробел.");
+            Console.WriteLine("Пример: 1 2 30");
+            for (int i = 0; i < graphs[1]; i++)
+            {
+                Correct = false;
+
+                input = Console.ReadLine().Split();
+
+                while (!Correct)
+                {
+                    try
+                    {
+                        if (!int.TryParse(input[0], out C1) || !int.TryParse(input[1], out C2) || !int.TryParse(input[2], out P))
+                            throw new FormatException($"Не удалось преобразовать входные данные в числа.");
+                        if (C1 < 0 || C2 < 0 || P < 0)
+                            throw new FormatException($"Номера городов и пассажиров должны быть больше 0.");
+                        adjancyMatrix[C1,C2] = P;
+                        adjancyMatrix[C2, C1] = P;
+
+                        Correct = true;
+                    }
+                    catch (FormatException e)
+                    {
+                        Console.WriteLine($"Неправильный формат ввода. Пожалуйста повторите ввод.\nОшибка: {e.Message}");
+                        input = Console.ReadLine().Split();
+
+                    }
+                }
+            }
+
+            Correct = false;
+            Console.WriteLine("Введите начальный город, конечный город и число туристов, которых необходимо перевезти.\nЧерез пробел.");
+            input = Console.ReadLine().Split();
+
+            while (!Correct)
+            {
+                try
+                {
+                    if (!int.TryParse(input[0], out S) || !int.TryParse(input[1], out D) || !int.TryParse(input[2], out T))
+                        throw new FormatException($"Не удалось преобразовать входные данные в числа.");
+                    if (S < 0 || D < 0 || T < 0)
+                        throw new FormatException($"Номера городов и пассажиров должны быть больше 0.");
+
+
+                    Correct = true;
+                }
+                catch (FormatException e)
+                {
+                    Console.WriteLine($"Неправильный формат ввода. Пожалуйста повторите ввод.\n Ошибка: {e.Message}");
+                    input = Console.ReadLine().Split();
+
+                }
+            }
+            MatrixFloyd();
+
+
+            Console.WriteLine($"Scenario {Tests+1}");
+            //- 1 потому что нужно считать еще себя(мистера Ж.)
+            int answer = T / (adjancyMatrix[S, D] - 1);
+            if (T % adjancyMatrix[S,D] > 0)
+            {
+                //Для оставшихся 
+                answer++;
+            }
+            Console.WriteLine($"Minimum Number of Trips = {answer}");
+        }
+
+
+
+    }
+  
 }

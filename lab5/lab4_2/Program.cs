@@ -19,18 +19,49 @@ class Intersections
 
 class FireStationPlacement
 {
+    static int I;
+    static int f;
+    static int[,] distances = new int[I, I];
+    static int[] depoNumber = new int[f];
+
+    static void ShowArray()
+    {
+        Console.Write("\t");
+        for (int i = 0; i < I; i++)
+        {
+            Console.Write($"\t{i+1}");
+        }
+        Console.WriteLine();
+        Console.Write("\t");
+        for (int i = 0; i < I; i++)
+        {
+            Console.Write("---------");
+        }
+        Console.WriteLine();
+
+        for (int i = 0; i < I; i++)
+        {
+            Console.Write($"\t{i + 1}|");
+
+            for (int j = 0; j < I; j++)
+            {
+                Console.Write($"\t{distances[i, j]}");
+            }
+            Console.WriteLine($"|");
+        }
+    }
     static void Main()
     {
         int t = int.Parse(Console.ReadLine());
         while (t-- > 0)
         {
             string[] inputs = Console.ReadLine().Split(' ');
-            int f = int.Parse(inputs[0]); // кол-во депо
-            int I = int.Parse(inputs[1]); // кол-во перекрестков
+            f = int.Parse(inputs[0]); // кол-во депо
+            I = int.Parse(inputs[1]); // кол-во перекрестков
 
             List<Intersections> intersections = new List<Intersections>();
 
-            int[] depoNumber = new int[f];
+            depoNumber = new int[f];
             for (int i = 0; i < f; i++)
             {
                 depoNumber[i] = int.Parse(Console.ReadLine()) - 1;
@@ -49,7 +80,7 @@ class FireStationPlacement
             }
 
             // Применяем алгоритм Флойда-Уоршелла
-            int[,] distances = new int[I, I];
+            distances = new int[I,I];
             for (int i = 0; i < I; i++)
             {
                 for (int j = 0; j < I; j++)
@@ -78,21 +109,8 @@ class FireStationPlacement
 
                 }
             }
-            #region ShowArray
-        Console.WriteLine("    1    2    3    4    5    6    7");
-            Console.WriteLine("    -------------------------------");
-            for (int i = 0; i < I; i++)
-            {
-                Console.Write($"{i + 1}|");
 
-
-                for (int j = 0; j < I; j++)
-                {
-                    Console.Write($"   {distances[i, j]}");
-                }
-                Console.WriteLine($" |");
-            }
-            #endregion
+            ShowArray();
 
             for (int k = 0; k < I; k++)
             {
@@ -113,21 +131,7 @@ class FireStationPlacement
                 }
             }
 
-            #region ShowArray
-            Console.WriteLine("    1    2    3    4    5    6    7");
-            Console.WriteLine("    -------------------------------");
-            for (int i = 0; i < I; i++)
-                {
-                    Console.Write($"{i + 1}|");
-
-
-                    for (int j = 0; j < I; j++)
-                    {
-                        Console.Write($"   {distances[i, j]}");
-                    }
-                    Console.WriteLine($" |");
-                }
-            #endregion
+            ShowArray();
 
 
 
@@ -201,22 +205,9 @@ class FireStationPlacement
             }
 
             maxValue = 0;
-            #region ShowArray
-            Console.WriteLine("    1    2    3    4    5    6    7");
-            Console.WriteLine("    -------------------------------");
-            for (int i = 0; i < I; i++)
-            {
-                Console.Write($"{i + 1}|");
+            ShowArray();
 
 
-                for (int j = 0; j < I; j++)
-                {
-                    Console.Write($"   {distances[i, j]}");
-                }
-                Console.WriteLine($" |");
-            }
-            #endregion
-    
             // Находим максимальное значение, исключая перекрестки, в которых уже есть депо
 
             for (int j = 0; j < ff; j++)

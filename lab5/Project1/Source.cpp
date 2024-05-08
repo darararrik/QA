@@ -37,7 +37,7 @@ int main() {
                 for (int j = 1; j <= numvertices; j++) {
                     adjmat[i][j] = max(adjmat[i][j], min(adjmat[i][k], adjmat[k][j]));
                 }
-            }
+            }[
         }
         printf("Scenario #%d\n", scenario);
         answer = passengers / (adjmat[partida][chegada] - 1);

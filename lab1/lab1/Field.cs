@@ -14,45 +14,42 @@ namespace lab1
         private char[,] field;
         private int n;
         private int m;
-        public Field(int n,int m)
+        public Field(int n, int m)
         {
             this.n = n;
             this.m = m;
-            field = new char[n,m];
+            field = new char[n, m];
         }
         public void FillField()
         {
-            for (int i = 0; i < n; i++) 
+            for (int i = 0; i < n; i++)
             {
                 string row = Console.ReadLine();
- 
+
+                while (!IsValidInput(row))
+                {
+                    Console.WriteLine("Ошибка ввода. Пожалуйста вводите только '*' или '.'");
+                    row = Console.ReadLine();
+                }
+
                 for (int j = 0; j < m; j++)
                 {
-                    if (row[j] == '*' || row[j] == '.')
-                        field[i, j] = row[j];
-                    else
-                    {
-                        Console.WriteLine("Нужно вводить . или *\nВ строке в которой был введен не верный символ, символ был заменен на .");
-                        field[i, j] = '.';
-                    }
-                }    
-                      
-                        
-
+                    field[i, j] = row[j];
+                }
             }
         }
         public void FinalField(int number)
         {
             StringBuilder res = new StringBuilder();
             res.AppendLine($"Field #{number}");
-            for (int i = 0; i< n; i++)
+            for (int i = 0; i < n; i++)
             {
 
-                for(int j = 0;j< m; j++)
+                for (int j = 0; j < m; j++)
                 {
-                    if (field[i,j] == '*')
+                    if (field[i, j] == '*')
                         res.Append('*');
-                    else res.Append(CountField(i,j));
+                    else res.Append(CountField(i, j));
                 }
                 res.AppendLine();
             }
@@ -74,5 +71,17 @@ namespace lab1
             }
             return count;
         }
+        static bool IsValidInput(string input)
+        {
+            foreach (char c in input)
+            {
+                if (c != '*' && c != '.')
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
+
 }

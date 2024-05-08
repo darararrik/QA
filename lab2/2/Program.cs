@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks.Sources;
 
 class Program
 {
@@ -59,33 +60,100 @@ class Program
 
     }
 
-    static void Main(string[] args)
+    static void Main()
     {
-        StreamReader reader = new StreamReader("input.txt");
-        int numOfTests = int.Parse(reader.ReadLine());
-
+        Console.WriteLine("Введите количество тестовых блоков.");
+        int numOfTests = int.Parse(Console.ReadLine().Trim());
         for (int t = 0; t < numOfTests; t++)
         {
-            int lines = int.Parse(reader.ReadLine());
-            List<string> startOrder = new List<string>();
-            for (int i = 0; i < lines; i++)
+            Console.WriteLine("Введите количество черепах в груде.");
+            bool CorrectInput = false;
+            int lines =0;
+            while(!CorrectInput) 
             {
-                startOrder.Add(reader.ReadLine().Trim());
+                try
+                {
+                    lines = int.Parse(Console.ReadLine().Trim());
+                    CorrectInput=true;
+                }
+                catch(FormatException)
+                {
+                    Console.WriteLine("Не верный формат. Введите пожалуйста количество черепах в груде.");
+
+                }
             }
 
-            List<string> endOrder = new List<string>();
+            List<string> startOrder = new List<string>();
+            HashSet<string> uniqueNames = new HashSet<string>();
+
+            Console.WriteLine("Введите начальный порядок груды.");
             for (int i = 0; i < lines; i++)
             {
-                endOrder.Add(reader.ReadLine().Trim());
+                string turtle;
+                bool validTurtle = false;
+
+                do
+                {
+                    turtle = Console.ReadLine().Trim();
+
+                    // Проверяем, что введенное имя является уникальным
+                    if (uniqueNames.Contains(turtle))
+                    {
+                        Console.WriteLine($"Черепаха с именем '{turtle}' уже была введена. Пожалуйста, введите уникальное имя.");
+                    }
+                    else
+                    {
+                        validTurtle = true;
+                        uniqueNames.Add(turtle); // Добавляем имя в множество уникальных имен
+                    }
+                } while (!validTurtle);
+
+                startOrder.Add(turtle);
+            }
+            Console.WriteLine("Введите желаемый порядок груды.");
+            List<string> endOrder = new List<string>();
+            uniqueNames.Clear();
+            for (int i = 0; i < lines; i++)
+            {
+                string turtle;
+                bool validTurtle = false;
+
+                do
+                {
+                    turtle = Console.ReadLine().Trim();
+
+                    // Проверяем, что введенное имя является уникальным
+                    if (!startOrder.Contains(turtle))
+                    {
+                        Console.WriteLine($"Черепаха с именем '{turtle}' отсутствует в начальной груде. Пожалуйста, введите имя снова.");
+                    }
+                    else if (uniqueNames.Contains(turtle))
+                    {
+                        Console.WriteLine($"Черепаха с именем '{turtle}' уже была введена. Пожалуйста, введите уникальное имя.");
+                    }
+                    else
+                    {
+                        validTurtle = true;
+                        uniqueNames.Add(turtle); // Добавляем имя в множество уникальных имен
+                    }
+                } while (!validTurtle);
+
+                endOrder.Add(turtle);
             }
 
             List<string> result = new List<string>();
 
-     
             SortSequence(startOrder, endOrder, result);
-            Console.WriteLine(string.Join(Environment.NewLine, result));
+            Console.WriteLine("\nОтвет:");
+            if (result.Count > 0)
+            {
+                Console.WriteLine(string.Join(Environment.NewLine, result));
+            }
+            else 
+            {
+                Console.WriteLine("Желаемый порядок уже был достиг");
+            }
             Console.WriteLine();
         }
-        reader.Close();
     }
 }

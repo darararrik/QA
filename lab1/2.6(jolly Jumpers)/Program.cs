@@ -1,7 +1,7 @@
 ﻿using jolly_Jumpers;
 internal class Program
 {
-    private static void Main(string[] args)
+    private static void Main()
     {
         Console.WriteLine("Введите последовательность целых чисел через пробел:");
         string input = Console.ReadLine();

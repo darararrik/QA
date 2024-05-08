@@ -3,7 +3,7 @@ using System;
 
 internal class Program
 {
-    private static void Main(string[] args)
+    private static void Main()
     {
         int[,] array = new int[4, 4];
         int N = 0;
@@ -24,13 +24,23 @@ internal class Program
             }
         
         }
-
+        Console.WriteLine("Введите поле для пятнашки, 0 - пустая клетка.");
         for (; N > 0; N--)
         {
+            // Используем HashSet для проверки уникальности чисел
+            HashSet<int> uniqueNumbers = new HashSet<int>();
             for (int i = 0; i < 4; i++)
             {
                 Console.WriteLine($"Введите {i+1} строку");
                 string[] str = Console.ReadLine().Split(' ');
+                // Проверяем длину массива строк
+                while (str.Length != 4)
+                {
+                    Console.WriteLine("Ошибка: Введено неправильное количество чисел в строке. Пожалуйста, введите 4 числа.");
+                    Console.WriteLine($"Повторите ввод строки [{i + 1}]: ");
+                    str = Console.ReadLine().Split(' ');
+                }
+
                 for (int j = 0; j < 4; j++)
                 {
                     parsedSuccessfully = false;
@@ -45,6 +55,12 @@ internal class Program
                                 Console.Write($"Повторите ввод элемента [{i + 1},{j + 1}]: ");
                                 str[j] = Console.ReadLine(); // Обнуляем только некорректный элемент
                             }
+                            else if (!uniqueNumbers.Add(inputValue)) // Проверяем уникальность числа
+                            {
+                                Console.WriteLine("Ошибка: Введено повторяющееся число. Пожалуйста, введите уникальное число.");
+                                Console.Write($"Повторите ввод элемента [{i + 1},{j + 1}]: ");
+                                str[j] = Console.ReadLine(); // Обнуляем только некорректный элемент
+                            }
                             else
                             {
                                 array[i, j] = inputValue;
@@ -54,7 +70,7 @@ internal class Program
                         catch (FormatException)
                         {
                             Console.WriteLine("Ошибка: Введено не число. Пожалуйста, введите число.");
-                            Console.Write($"Повторите ввод элемента [{i + 1},{j + 1}]: ");
+                            Console.Write($"Повторите ввод для элемента [{i + 1},{j + 1}]: ");
                             str[j] = Console.ReadLine(); // Обнуляем только некорректный элемент
                         }
                     }

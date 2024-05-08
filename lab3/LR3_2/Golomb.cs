@@ -15,7 +15,7 @@ namespace LR3_2
             this.f = new int[n + 1];
             CalculateGolomb(n);
         }
-
+        //https://en.wikipedia.org/wiki/Golomb_sequence алгоритм взят отсюда
         private void CalculateGolomb(int n)
         {
             f[1] = 1;

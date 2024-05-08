@@ -3,6 +3,8 @@ namespace lab2
 {
     internal static class KeyboardShift
     {
+        //создаем коллекцию ключ значение
+     
         private static Dictionary<char, char> keyboardMapping = new Dictionary<char, char>
         {
             {'Q','Q'},{'W','Q'},{'E','W'},{'R','E'},{'T','R'},{'Y','T'},

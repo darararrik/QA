@@ -1,31 +1,39 @@
 ﻿
+using System.Numerics;
+
 namespace jolly_Jumpers
 {
     internal static class JollyJumpers
     {
         public static bool IsJollyJumpers(string input)
         {
-            int count = 0;
+            int d;
             string[] Numbers = input.Split(' ');
             int[] NumbersInt = new int[Numbers.Length];
-            if (Numbers.Length > 3000 || Numbers.Length <= 1)
+            bool parsedSuccessfully = false;
+            //Проверка на ввод
+            for (int i = 0;i<NumbersInt.Length;i++)
             {
-                Console.WriteLine("В строке должно быть чисел < 3000 и > 1.");
-                return false;
+                parsedSuccessfully = false;
 
-            }
-
-            for (int i = 0; i < Numbers.Length; i++)
-            {
-                if (!int.TryParse(Numbers[i], out NumbersInt[i]))
+                while (!parsedSuccessfully)
                 {
-                    Console.WriteLine("Неправильный формат числа.");
-                    return false;
+                    try
+                    {
+                        NumbersInt[i] = int.Parse(Numbers[i]);
+                        parsedSuccessfully = true;
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine($"Ошибка: Ваш ввод: {Numbers[i]}. Пожалуйста повторите ввод числа:");
+                        Numbers[i] = Console.ReadLine(); // Обнуляем только некорректный элемент
+                    }
                 }
 
             }
+
+            //Создаем булевой массив
             Boolean[] array = new Boolean[Numbers.Length];
-            int d;
             for (int i = 0;i<NumbersInt.Length - 1;i++)
             {
                 d = Math.Abs(NumbersInt[i] - NumbersInt[i+1]);
