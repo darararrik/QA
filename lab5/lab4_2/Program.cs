@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using static System.Net.Mime.MediaTypeNames;
+// Класс, представляющий информацию о перекрестках
 class Intersections
 {
     public int from;
@@ -17,69 +18,130 @@ class Intersections
     }
 }
 
-class FireStationPlacement
+class Program
 {
-    static int I;
-    static int f;
-    static int[,] distances = new int[I, I];
-    static int[] depoNumber = new int[f];
+    static int I;// кол-во перекрестков
+    static int f; // кол-во депо
+    static int[,] distances = new int[I, I]; // Массив для хранения расстояний между перекрестками
+    static int[] depoNumber = new int[f];  // Массив для хранения номеров перекрестков с депо
+    static int t;// Количество тестовых блоков
 
-    static void ShowArray()
-    {
-        Console.Write("\t");
-        for (int i = 0; i < I; i++)
-        {
-            Console.Write($"\t{i+1}");
-        }
-        Console.WriteLine();
-        Console.Write("\t");
-        for (int i = 0; i < I; i++)
-        {
-            Console.Write("---------");
-        }
-        Console.WriteLine();
 
-        for (int i = 0; i < I; i++)
-        {
-            Console.Write($"\t{i + 1}|");
-
-            for (int j = 0; j < I; j++)
-            {
-                Console.Write($"\t{distances[i, j]}");
-            }
-            Console.WriteLine($"|");
-        }
-    }
     static void Main()
     {
-        int t = int.Parse(Console.ReadLine());
+        bool Correct = false;
+        int[] line = new int[3];
+        // Запрос на ввод количества тестовых блоков
+        Console.WriteLine("Введите количество тестовых блоков.");
+        while (!Correct)
+        {
+            try
+            {
+                if (!int.TryParse(Console.ReadLine(), out t))
+                    throw new FormatException("Неправильный формат ввода. Пожалуйста, введите одно число.");
+                if (t == 0 || t < 0)
+                    throw new FormatException("Введите число >0");
+
+                Correct = true;
+
+            }
+            catch (FormatException e)
+            {
+
+                Console.WriteLine($"Ошибка ввода: {e.Message}");
+            }
+        }
+        Console.WriteLine();
         while (t-- > 0)
         {
-            string[] inputs = Console.ReadLine().Split(' ');
-            f = int.Parse(inputs[0]); // кол-во депо
-            I = int.Parse(inputs[1]); // кол-во перекрестков
+            Console.WriteLine("Введите число существующих пожарных депо и число перекрестков через пробел.");
+            string[] input = Console.ReadLine().Split();
 
+            Correct = false;
+
+            while (!Correct)
+            {
+                try
+                {
+                    if(input.Length !=2)
+                        throw new FormatException($"Введите два числа!");
+
+                    if (!int.TryParse(input[0], out f) || !int.TryParse(input[1], out I))
+                        throw new FormatException($"Неправильный формат ввода. Пожалуйста повторите ввод депо и перекрестков.");
+                    if (f == 0 || f < 0 || I == 0 || I < 0)
+                        throw new FormatException("Неправильный формат ввода. Пожалуйста повторите ввод депо и перекрестков. Числа должны быть больше 0.");
+                    Correct = true;
+                }
+                catch (FormatException e)
+                {
+                    Console.WriteLine($"Ошибка ввода: {e.Message}");
+                    input = Console.ReadLine().Split();
+
+                }
+            }
             List<Intersections> intersections = new List<Intersections>();
 
             depoNumber = new int[f];
+            Console.WriteLine($"Введите номер перекрестка, на котором расположено пожарное депо.");
             for (int i = 0; i < f; i++)
             {
-                depoNumber[i] = int.Parse(Console.ReadLine()) - 1;
-            }
+                Correct = false;
+                while (!Correct)
+                {
+                    try
+                    {
 
+                        if (!int.TryParse(Console.ReadLine() , out depoNumber[i]))
+                            throw new FormatException("Неправильный формат ввода. Пожалуйста, введите одно число.");
+                        depoNumber[i]--;
+                        if (depoNumber[i] < 0)
+                            throw new FormatException("Введите число >0");
+                        Correct = true;
+
+                    }
+                    catch (FormatException e)
+                    {
+
+                        Console.WriteLine($"Ошибка ввода: {e.Message}");
+                    }
+                }
+            }
+            // Запрос на ввод информации о дорогах между перекрестками
+            Console.WriteLine("Введите номер перекрестка, номер другого перекрестка и длину дороги между ними.");
             for (int i = 0; i < I; i++)
             {
-                string[] line = Console.ReadLine().Split(' ');
-                intersections.Add(new Intersections(int.Parse(line[0]), int.Parse(line[1]), int.Parse(line[2])));
+                input = Console.ReadLine().Split(' ');
+                Correct = false;
+                while (!Correct)
+                {
+                    try
+                    {
+                        if (input.Length != 3)
+                            throw new FormatException($"Введите три числа!");
+                        if (!int.TryParse(input[0], out line[0]) || !int.TryParse(input[1], out line[1]) || !int.TryParse(input[2], out line[2]))
+                            throw new FormatException("Не удалось преобразовать в числа. Скорее всего были введены буквы.");
+                        if (line[0] <= 0 || line[1] <= 0|| line[2] <= 0)
+                            throw new FormatException("Номер перекреста и длина дороги не могут быть меньше или равны 0"); 
+                        intersections.Add(new Intersections(line[0], line[1], line[2]));
+                        Correct = true;
+
+                    }
+                    catch (FormatException e)
+                    {
+
+                        Console.WriteLine($"Неправильный формат ввода. Пожалуйста повторите ввод, номер первого перекрестка, номер второго перекрестка и длину дороги между ними.\nОшибка: {e.Message}");
+                        input = Console.ReadLine().Split(' ');
+                    }
+                }
             }
 
-            // Устанавливаем флаги депо для перекрестков
+            // Устанавливаем значения наличия депо для перекрестков
             foreach (int depoIndex in depoNumber)
             {
                 intersections[depoIndex].hasDepo = true;
             }
 
-            // Применяем алгоритм Флойда-Уоршелла
+            //Заполняем матрицу расстояний
             distances = new int[I,I];
             for (int i = 0; i < I; i++)
             {
@@ -91,7 +153,7 @@ class FireStationPlacement
                         distances[i, j] = -1;
                 }
             }
-
+            // Заполняем массив distances информацией о дорогах
             for (int i = 1; i <= I; i++)
             {
                 for (int j = 1; j <= I; j++)
@@ -110,8 +172,7 @@ class FireStationPlacement
                 }
             }
 
-            ShowArray();
-
+            // Поиск кратчайших путей между всеми парами перекрестков с использованием алгоритма Флойда-Уоршелла
             for (int k = 0; k < I; k++)
             {
                 for (int i = 0; i < I; i++)
@@ -131,7 +192,6 @@ class FireStationPlacement
                 }
             }
 
-            ShowArray();
 
 
 
@@ -140,7 +200,6 @@ class FireStationPlacement
             int minValue = int.MaxValue;
 
             int ff = depoNumber.Count();
-            Console.WriteLine(ff);
             for (int i = 0; i < ff; i++)
             {
                 for (int j = 0; j < I; j++)
@@ -155,9 +214,6 @@ class FireStationPlacement
                 }
                
             }
-            Console.WriteLine();
-            Console.WriteLine($"minValue = {minValue}");
-            Console.WriteLine();
 
             int maxValue = 0;
             int optimal = 0;
@@ -178,7 +234,6 @@ class FireStationPlacement
                     }
                 }
             }
-            Console.WriteLine($"maxValue 1 = {maxValue} ");
 
             for (int i = 0; i < ff; i++)
             {
@@ -205,7 +260,6 @@ class FireStationPlacement
             }
 
             maxValue = 0;
-            ShowArray();
 
 
             // Находим максимальное значение, исключая перекрестки, в которых уже есть депо
@@ -228,15 +282,7 @@ class FireStationPlacement
                     }
                 }
             }
-
-
-
-            Console.WriteLine();
-            Console.WriteLine($"maxValue 2 = {maxValue}");
-            Console.WriteLine();
-
-
-           Console.WriteLine(optimal);
+           Console.WriteLine($"Оптимальное расположение нового депо:{optimal}");
         }
     }
 }

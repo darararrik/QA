@@ -1,4 +1,6 @@
-﻿internal class Program
+﻿using System.ComponentModel;
+
+internal class Program
 {
     static int[,] adjancyMatrix;
     //graphs[0] - Вершины
@@ -56,6 +58,7 @@
                 Console.WriteLine($"Ошибка ввода: {e.Message}");
             }
         }
+        int scenario = 0 ;
         while (Tests-->0) 
         {
             Console.WriteLine("Введите число городов и число дорожных сегментов через пробел.");
@@ -139,7 +142,7 @@
             MatrixFloyd();
 
 
-            Console.WriteLine($"Scenario {Tests+1}");
+            Console.WriteLine($"Scenario {++scenario}");
             //- 1 потому что нужно считать еще себя(мистера Ж.)
             int answer = T / (adjancyMatrix[S, D] - 1);
             if (T % adjancyMatrix[S,D] > 0)
