@@ -4,10 +4,15 @@ namespace FinalProject
 {
     internal class Document
     {
-        public string Title { get; set; }
+        public string Adress { get; set; }
         public string Content { get; set; }
         public List<string> ExternalLinks { get; set; }
-
+        public string[] words;
+        public Document(string Adress,string Content) 
+        { 
+            this.Adress = Adress;
+            this.Content = Content;
+        }
         public int GetWordCount()
         {
             //Проверка на null
